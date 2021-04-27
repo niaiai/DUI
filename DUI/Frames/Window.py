@@ -155,6 +155,7 @@ class Window:
         self.lineMaker = LineMaker(title,width,height,system,skin)  #渲染器对象   iter
         self.pointCondition = True
         self.buttonIndex = None           #按钮控件在 linemaker 中的位置
+        self.clear = is_windows and "cls" or "clear"
 
     def addWidget(self,line,widget):
         #添加一个控件
@@ -221,10 +222,7 @@ class Window:
 
         # 清屏
         if not noClean:
-            if self.lineMaker.system == 0:
-                os.system("cls")
-            else:
-                os.system("clear")
+            os.system(self.clear)
 
         #先导入Canvas
         for c in self.lineMaker.widgeter.canvas:
