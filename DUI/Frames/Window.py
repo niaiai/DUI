@@ -1,25 +1,21 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-#__author__ = "Lettle"
-#QQ: 1071445082
-#fileName: Window.py
-import os
+# __author__ = "Lettle"
+# QQ: 1071445082
+# fileName: Window.py
 
 from DUI.bin import *
 
-# defaultSkin4Windows = [
-#     "┌─┐",
-#     "│┼│",
-#     "└─┘"
-# ]
 defaultSkin4Windows = [
     "+-+",
     "|┼|",
     "+-+"
 ]
-#皮肤构造器
+
+
+# 皮肤构造器
 class SkinMaker:
-    def __init__(self,skin):
+    def __init__(self, skin):
         self.LeftUp = skin[0][0]
         self.RightUp = skin[0][2]
         self.LeftDown = skin[2][0]
@@ -28,7 +24,8 @@ class SkinMaker:
         self.VerticalLine = skin[1][0]
         self.corner = skin[1][1]
 
-#控件管理器
+
+# 控件管理器
 class Widgeter:
     def __init__(self):
         self.widgets = []
@@ -42,11 +39,13 @@ class Widgeter:
             self.canvas.append(widget)
         else:
             self.widgets.append(widget)
+
     def get(self, index):
         if index:
             return self.widgets[index]
         else:
             return None
+
     def update(self, widgetTuple):
         i = 0  # 计数器
 
@@ -68,16 +67,17 @@ class Widgeter:
     def getList(self):
         return self.widgets
 
-#这是一个迭代器,使用它来迭代每一行要输出的屏幕内容
+
+# 这是一个迭代器,使用它来迭代每一行要输出的屏幕内容
 class LineMaker:
-    def __init__(self, title, width=30, height=20,skin=None):
+    def __init__(self, title, width=30, height=20, skin=None):
         if skin is None:
             skin = defaultSkin4Windows
-        self.title = title           # str
-        self.width = width           # int
-        self.height = height         # int
+        self.title = title  # str
+        self.width = width  # int
+        self.height = height  # int
         self.skin = SkinMaker(skin)  # 是一个皮肤类型的class
-        self.widgeter = Widgeter()   # 是一个包含多个tuple(line,widget)成员的List
+        self.widgeter = Widgeter()  # 是一个包含多个tuple(line,widget)成员的List
 
     def __iter__(self):
         self.nowHeight = 1
@@ -100,18 +100,18 @@ class LineMaker:
         else:
             blank = " "
 
-        #开始绘制Widget
+        # 开始绘制Widget
         if nowHeight != 1 and nowHeight != self.height:
             # 如果当前不是第一行或者最后一行
             for widget in self.widget_temp:
-                if widget[0] == nowHeight:         #如果控件是在这一行的
+                if widget[0] == nowHeight:  # 如果控件是在这一行的
                     # 获得该行的控件
-                    widget_thisLine = widget[1]     #将此控件取出
-                    self.widget_temp.remove(widget)  #将此控件从缓存中删除
+                    widget_thisLine = widget[1]  # 将此控件取出
+                    self.widget_temp.remove(widget)  # 将此控件从缓存中删除
                     break
                 else:
                     widget_thisLine = None
-            if widget_thisLine:  #如果获取到了
+            if widget_thisLine:  # 如果获取到了
                 if widget_thisLine.getType == "Button":
                     pass
                 else:
@@ -127,7 +127,7 @@ class LineMaker:
             textThisLine = skin.LeftUp + \
                            skin.HorizontalLine + \
                            self.title + \
-                           skin.HorizontalLine*(self.width - 5 - slen(self.title)) + "X" + \
+                           skin.HorizontalLine * (self.width - 5 - slen(self.title)) + "X" + \
                            skin.HorizontalLine + skin.RightUp
 
         elif nowHeight == self.height:
@@ -136,29 +136,35 @@ class LineMaker:
 
         return textThisLine
 
-    def addWidgets(self,widgetTuple):
+    def addWidgets(self, widgetTuple):
         self.widgeter.append(widgetTuple)
-    def updateWidget(self,widgetTuple):
+
+    def updateWidget(self, widgetTuple):
         self.widgeter.update(widgetTuple)
+
     def getWidgets(self):
         return self.widgeter.getList()
+
     def getWidgeter(self):
         return self.widgeter
-    def getWidget(self,index):
+
+    def getWidget(self, index):
         return self.widgeter.widgets[index]
+
     def setWindowIndex(self, windowIndex):
         self.windowIndex = windowIndex
+
 
 class Window:
     def __init__(self, title, width=30, height=20, skin=None):
         if skin is None:
             skin = defaultSkin4Windows
-        self.lineMaker = LineMaker(title,width,height,skin)  #渲染器对象   iter
+        self.lineMaker = LineMaker(title, width, height, skin)  # 渲染器对象   iter
         self.pointCondition = True
-        self.buttonIndex = None           #按钮控件在 linemaker 中的位置
+        self.buttonIndex = None  # 按钮控件在 linemaker 中的位置
 
-    def addWidget(self,line,widget):
-        #添加一个控件
+    def addWidget(self, line, widget):
+        # 添加一个控件
         if widget.getType() == "Button" and self.pointCondition:
             '''
                 如果是按钮 则将指针指向按钮并且添加控件不再改变
@@ -171,17 +177,19 @@ class Window:
             widget.setSkinMaker(self.lineMaker.skin)
         elif widget.getType() == "Canvas":
             self = widget.setCanvas(self)
-        self.lineMaker.addWidgets(tuple([line,widget]))
+        self.lineMaker.addWidgets(tuple([line, widget]))
         return self
+
     def updateWidget(self, line, widget):
         if widget.getType() == "Alert":
             widget.setWindowWidth(self.lineMaker.width)
             widget.setSkinMaker(self.lineMaker.skin)
-        self.lineMaker.updateWidget(tuple([line,widget]))
+        self.lineMaker.updateWidget(tuple([line, widget]))
         return self
 
     def getPointButton(self):
         return self.lineMaker.getWidgeter().get(self.buttonIndex)
+
     '''
         页面指针控制
     '''
@@ -190,22 +198,24 @@ class Window:
         if len(widgets) != 0:
             for i in widgets[:self.buttonIndex]:
                 if i[1].getType() == "Button":
-                    #如果当前指针上面还有按钮
+                    # 如果当前指针上面还有按钮
                     self.lineMaker.getWidgets()[self.buttonIndex][1].leave()
                     self.buttonIndex -= 1
                     self.lineMaker.getWidgets()[self.buttonIndex][1].pointed()
                     return
+
     def down(self):
         widgets = self.lineMaker.getWidgets()
         if len(widgets) != 0:
-            for i in widgets[self.buttonIndex+1:]:
+            for i in widgets[self.buttonIndex + 1:]:
                 if i[1].getType() == "Button":
-                    #如果当前指针下面还有按钮
+                    # 如果当前指针下面还有按钮
                     self.lineMaker.getWidgets()[self.buttonIndex][1].leave()
                     self.buttonIndex += 1
                     self.lineMaker.getWidgets()[self.buttonIndex][1].pointed()
                     return
-    #按钮确认键
+
+    # 按钮确认键
     def confirm(self):
         widgeter = self.lineMaker.getWidgeter()
         widgeter.get(self.buttonIndex)[1].press()
@@ -220,11 +230,11 @@ class Window:
             # print("\033[H")
             clear()
 
-        #先导入Canvas
+        # 先导入Canvas
         for c in self.lineMaker.widgeter.canvas:
             self = c[1].showCanvas(self)
 
-        #显示控件
+        # 显示控件
         myiter = iter(self.lineMaker)
         for text in myiter: print(text)
 
