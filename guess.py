@@ -49,7 +49,7 @@ frame = Frame()
 
 #主界面
 mainWindow = Window("主界面")
-mainWindow.addWidget(2, Text("猜数游戏", 1))
+mainWindow.addWidget(2, Text("猜数游戏", type=1))
 mainWindow.addWidget(5, Button("开始游戏", onClick=guess))
 mainWindow.addWidget(6, Button("结束游戏", onClick=quit))
 frame.addWindow(mainWindow, 0)
@@ -63,7 +63,7 @@ frame.addWindow(gameWindow, 1)
 
 #游戏结束界面
 overWindow = Window("猜数成功!")
-overWindow.addWidget(2, Text("恭喜你猜对了！", 1))
+overWindow.addWidget(2, Text("恭喜你猜对了！", type=1))
 overWindow.addWidget(5, Button("返回主界面", onClick=mainW))     #此处不设置onClick事件来跳入while主循环
 frame.addWindow(overWindow, 2)
 

@@ -7,13 +7,12 @@ from DUI.Widgets import Widget
 from DUI.bin import *
 
 class Text(Widget):
-	def __init__(self, text="", type=0, id=None):
+	def __init__(self, text="", checked_prefix_text="", type=0, id=None):
 		super().__init__("Text", id)
 		self.text = text
 		# 0 左对齐 1 居中 2 右对齐
 		self.type = type
-		# 0 Windows 1 Linux
-		self.system = 0
+		self.checked_prefix_text = checked_prefix_text
 		# self.setText(text,type)
 
 
@@ -28,7 +27,7 @@ class Text(Widget):
 	def setType(self, type):
 		super().setType(type)
 
-	def print(self, width, system):
+	def print(self, width, system, checked=None):
 		# 根据系统调整空格大小(此版本无效)
 		# if system == 0:
 		# 	long = width
@@ -41,14 +40,19 @@ class Text(Widget):
 
 		long = width
 		b = 2
-		textLength = slen(self.text)
+		if checked:
+			text = self.checked_prefix_text + self.text
+		else:
+			text = " " * len(self.checked_prefix_text) + self.text
+		textLength = slen(text)
+
 		if self.type == 0:
 			'''左对齐'''
-			return self.text + " " * (long - textLength - b)
+			return text + " " * (long - textLength - b)
 		elif self.type == 1:
 			'''居中'''
 			a = int((long - textLength - b) / 2)
-			return " " * a + self.text + " " * (long - a - textLength - 2)
+			return " " * a + text + " " * (long - a - textLength - 2)
 		else:
 			'''右对齐'''
-			return " " * (long - textLength - 2) + self.text
+			return " " * (long - textLength - 2) + text

@@ -70,13 +70,12 @@ class Widgeter:
 
 #这是一个迭代器,使用它来迭代每一行要输出的屏幕内容
 class LineMaker:
-    def __init__(self, title, width=30, height=20, system=0, skin=None):
+    def __init__(self, title, width=30, height=20,skin=None):
         if skin is None:
             skin = defaultSkin4Windows
         self.title = title           # str
         self.width = width           # int
         self.height = height         # int
-        self.system = system         # int
         self.skin = SkinMaker(skin)  # 是一个皮肤类型的class
         self.widgeter = Widgeter()   # 是一个包含多个tuple(line,widget)成员的List
 
@@ -96,9 +95,9 @@ class LineMaker:
             '''如果迭代器超过了最后一位'''
             raise StopIteration
 
-        if self.system == 0:
+        if is_windows:
             blank = "  "
-        elif self.system == 1:
+        else:
             blank = " "
 
         #开始绘制Widget
@@ -117,7 +116,7 @@ class LineMaker:
                     pass
                 else:
                     # 获得控件返回的文本
-                    textThisLine = widget_thisLine.print(self.width, self.system)
+                    textThisLine = widget_thisLine.print(self.width, int(not is_windows))
             else:
                 textThisLine = " " * (self.width - 2)
             # 组装窗口界面
@@ -125,7 +124,11 @@ class LineMaker:
 
         elif nowHeight == 1:
             # 如果当前是第一行
-            textThisLine = skin.LeftUp + skin.HorizontalLine + self.title + skin.HorizontalLine*(self.width - 5 - slen(self.title)) + "X" + skin.HorizontalLine + skin.RightUp
+            textThisLine = skin.LeftUp + \
+                           skin.HorizontalLine + \
+                           self.title + \
+                           skin.HorizontalLine*(self.width - 5 - slen(self.title)) + "X" + \
+                           skin.HorizontalLine + skin.RightUp
 
         elif nowHeight == self.height:
             # 如果是最后一行
@@ -143,19 +146,16 @@ class LineMaker:
         return self.widgeter
     def getWidget(self,index):
         return self.widgeter.widgets[index]
-    def setSystem(self, system):
-        self.system = system
     def setWindowIndex(self, windowIndex):
         self.windowIndex = windowIndex
 
 class Window:
-    def __init__(self, title, width=30, height=20, system=0, skin=None):
+    def __init__(self, title, width=30, height=20, skin=None):
         if skin is None:
             skin = defaultSkin4Windows
-        self.lineMaker = LineMaker(title,width,height,system,skin)  #渲染器对象   iter
+        self.lineMaker = LineMaker(title,width,height,skin)  #渲染器对象   iter
         self.pointCondition = True
         self.buttonIndex = None           #按钮控件在 linemaker 中的位置
-        self.clear = is_windows and "cls" or "clear"
 
     def addWidget(self,line,widget):
         #添加一个控件
@@ -171,8 +171,6 @@ class Window:
             widget.setSkinMaker(self.lineMaker.skin)
         elif widget.getType() == "Canvas":
             self = widget.setCanvas(self)
-        else:
-            widget.system = self.lineMaker.system
         self.lineMaker.addWidgets(tuple([line,widget]))
         return self
     def updateWidget(self, line, widget):
@@ -182,9 +180,6 @@ class Window:
         self.lineMaker.updateWidget(tuple([line,widget]))
         return self
 
-    def setSystem(self, system):
-        self.lineMaker.setSystem(system)
-        return self
     def getPointButton(self):
         return self.lineMaker.getWidgeter().get(self.buttonIndex)
     '''
@@ -222,7 +217,8 @@ class Window:
 
         # 清屏
         if not noClean:
-            os.system(self.clear)
+            # print("\033[H")
+            clear()
 
         #先导入Canvas
         for c in self.lineMaker.widgeter.canvas:

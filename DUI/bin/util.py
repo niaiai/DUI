@@ -3,7 +3,7 @@
 #__author__ = "Lettle"
 #QQ: 1071445082
 #fileName: *.py
-
+import os
 import platform
 
 def singleton(cls):
@@ -27,3 +27,8 @@ def slen(value):
 
 
 is_windows = platform.system() == "Windows"
+_clear = is_windows and "cls" or "clear"
+
+
+def clear():
+    os.system(_clear)

@@ -5,22 +5,20 @@
 #fileName: Frame.py
 
 from DUI.Frames.Listener import *
+from DUI.bin import clear
 import time
 
 class Frame:
-    def __init__(self,system="Windows",showFPS=False,noClean=False):
+    def __init__(self, showFPS=False,noClean=False):
         self.windows = []  #储存window
         self.alert = None
         self.listener = Listener(0)
         self.nowWindow = None
         self.showFPS = showFPS
         self.noClean = noClean
-        #判断显示格式
-        s = system.lower()
-        if s == "windows" or s == "win" or s == "w":
-            self.system = 0
-        elif s == "linux" or s == "l":
-            self.system = 1
+        # clear
+        clear()
+
 
     '''
         设置窗口皮肤
@@ -42,8 +40,7 @@ class Frame:
             self.windows[index] = window
         except:
             self.windows.append(window)
-            index = self.windows.__len__()-1
-        self.windows[index].setSystem(self.system)
+
     def updateWindow(self, window, index):
         self.windows[index] = window
     def delWindow(self,index):
@@ -64,6 +61,9 @@ class Frame:
             self.listener.setPointButton(pointButton)
 
         if self.showFPS:
-            time_end = time.time()  # 结束计时
-            FPS = 1/(time_end - time_start)
-            print("FPS:",int(FPS))
+            time_use = time.time() - time_start  # 计时
+            if time_use == 0:
+                FPS = "   +∞"
+            else:
+                FPS = "% 5d" % int(1 / time_use)
+            print("FPS:", FPS)

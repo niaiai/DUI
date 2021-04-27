@@ -8,9 +8,9 @@ from DUI.Widgets import Text
 
 
 class Button(Text):
-	def __init__(self, text="", mode=False, id=None, onClick=None):
-		super().__init__(text, id=id)
-		super(Text, self).setType("Button")
+	def __init__(self, text="", checked_prefix_text=">|", mode=False, id=None, onClick=None):
+		super().__init__(text, checked_prefix_text, id=id)
+		super().setType("Button")
 		self.isPointed = mode     #指针是否指向当前Button bools
 		self.onClick = onClick    #点击事件
 
@@ -29,13 +29,8 @@ class Button(Text):
 		绘制按钮  mode: 0 未选中 1 选中
 	'''
 	def print(self, width, system, mode=0):
-		text = super().getText()
-		if self.isPointed:
-			super().setText(">|" + text)
-			temp = super().print(width, system)
-			super().setText(text)
-			return temp
-		return super().print(width, system)
+		return super().print(width, system, self.isPointed)
+
 # def getText(self, width, system):
 	# 	if system == 0:
 	# 		long = width
