@@ -12,6 +12,6 @@
     @ Listener
 """
 
-from DUI.Frames.Frame import *
-from DUI.Frames.Window import *
-from DUI.Frames.Listener import *
+from DUI.Frames.Frame import Frame
+from DUI.Frames.Window import Window
+from DUI.Frames.Listener import Listener

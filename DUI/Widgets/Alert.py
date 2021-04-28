@@ -6,11 +6,12 @@
 from DUI.Widgets import Widget
 from DUI.Frames.Window import SkinMaker
 from DUI.bin import *
+from DUI.enums import WidgetEnum
 
 
 class Alert(Widget):
     def __init__(self, text=""):
-        super().__init__("Alert", None)
+        super().__init__(WidgetEnum.ALERT)
         self.text = text
         self.window_width = None
         self.skinmaker = None
@@ -23,7 +24,7 @@ class Alert(Widget):
         self.skinmaker = skin
 
     def showAlert(self):
-        if self.text != "":
+        if self.text:
             textLength = slen(self.text)
             textThisLine = self.text + " " * (self.window_width - textLength - 2)
             textThisLine = self.skinmaker.VerticalLine + textThisLine + self.skinmaker.VerticalLine

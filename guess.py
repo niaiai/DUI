@@ -19,13 +19,15 @@ DUI控件使用:
 from DUI import *
 from random import randint
 
+from DUI.enums import TextAlignEnum
+
 
 def mainW():
     frame.showWindow(0)
 
 
 def guess():
-    an = randint(0, 10)
+    an = randint(0, 2)
     frame.showWindow(1)
     while True:
         txt = listen.getText()
@@ -51,9 +53,9 @@ frame = Frame()
 
 # 主界面
 mainWindow = Window("主界面")
-mainWindow.addWidget(2, Text("猜数游戏", type=1))
-mainWindow.addWidget(5, Button("开始游戏", onClick=guess))
-mainWindow.addWidget(6, Button("结束游戏", onClick=quit))
+mainWindow.addWidget(2, Text("猜数游戏", text_align=TextAlignEnum.CENTER))
+mainWindow.addWidget(5, Button("开始游戏", on_click=guess))
+mainWindow.addWidget(6, Button("结束游戏", on_click=quit))
 frame.addWindow(mainWindow, 0)
 
 # 游戏界面
@@ -65,12 +67,12 @@ frame.addWindow(gameWindow, 1)
 
 # 游戏结束界面
 overWindow = Window("猜数成功!")
-overWindow.addWidget(2, Text("恭喜你猜对了！", type=1))
-overWindow.addWidget(5, Button("返回主界面", onClick=mainW))  # 此处不设置onClick事件来跳入while主循环
+overWindow.addWidget(2, Text("恭喜你猜对了！", text_align=TextAlignEnum.CENTER))
+overWindow.addWidget(5, Button("返回主界面", on_click=mainW))  # 此处不设置onClick事件来跳入while主循环
 frame.addWindow(overWindow, 2)
 
 # 设置监听器
-listen = Listener(0)
+listen = Listener(mode=0)
 keys = {
     "quit": quit,
     "exit": quit,
@@ -79,10 +81,12 @@ keys = {
     "y": listen.confirm,
     "\n": None
 }
-listen.setDict(keys)
+listen.dict = keys
+
 frame.setListener(listen)
 
-# 主程序开始
-while True:
-    frame.showWindow(0)
-    frame.listener.run()
+if __name__ == "__main__":
+    # 主程序开始
+    while True:
+        frame.showWindow(0)
+        frame.listener.run()

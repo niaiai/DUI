@@ -4,7 +4,7 @@
 # QQ: 1071445082
 # fileName: *.py
 
-from DUI.Widgets.Widget import *
-from DUI.Widgets.Text import *
-from DUI.Widgets.Button import *
-from DUI.Widgets.Alert import *
+from DUI.Widgets.Widget import Widget
+from DUI.Widgets.Text import Text
+from DUI.Widgets.Button import Button
+from DUI.Widgets.Alert import Alert

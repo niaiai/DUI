@@ -3,47 +3,33 @@
 # __author__ = "Lettle"
 # QQ: 1071445082
 # fileName: *.py
+from DUI.enums import WidgetEnum, TextAlignEnum
 from DUI.Widgets import Widget
 from DUI.bin import *
 
 
 class Text(Widget):
-    def __init__(self, text="", checked_prefix_text="", type=0, id=None):
-        super().__init__("Text", id)
+    def __init__(self, text="", pointed_text="", text_align: TextAlignEnum = TextAlignEnum.LEFT, widget_id=None):
+        super().__init__(WidgetEnum.TEXT, widget_id)
         self.text = text
         # 0 左对齐 1 居中 2 右对齐
-        self.type = type
-        self.checked_prefix_text = checked_prefix_text
+        self.text_align = text_align
+        self.pointed_text = pointed_text
 
-    # self.setText(text,type)
-
-    def setText(self, text, type=0):
-        self.text = text
-        self.type = type
-
-    def getText(self):
-        return self.text
-
-    def getType(self):
-        return super().getType()
-
-    def setType(self, type):
-        super().setType(type)
-
-    def print(self, width, system, checked=None):
+    def render(self, width, system, checked=None, **kwargs):
         # 根据系统调整空格大小(此版本无效)
         long = width
         b = 2
         if checked:
-            text = self.checked_prefix_text + self.text
+            text = self.pointed_text + self.text
         else:
-            text = " " * len(self.checked_prefix_text) + self.text
+            text = " " * len(self.pointed_text) + self.text
         textLength = slen(text)
 
-        if self.type == 0:
+        if self.text_align is TextAlignEnum.LEFT:
             '''左对齐'''
             return text + " " * (long - textLength - b)
-        elif self.type == 1:
+        if self.text_align is TextAlignEnum.CENTER:
             '''居中'''
             a = int((long - textLength - b) / 2)
             return " " * a + text + " " * (long - a - textLength - 2)

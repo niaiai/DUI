@@ -3,11 +3,12 @@
 # __author__ = "Lettle"
 # QQ: 1071445082
 # fileName: ball.py
+import time
 
 from DUI import *
 
 # DUI 加载
-f = Frame(showFPS=True)
+f = Frame(show_fps=True)
 mainWindow = Window("弹球", width=34, height=16)
 f.addWindow(mainWindow, 0)
 for i in range(1, 16):

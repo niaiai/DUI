@@ -10,13 +10,13 @@ import time
 
 
 class Frame:
-    def __init__(self, showFPS=False, noClean=False):
+    def __init__(self, show_fps=False, no_clean=False):
         self.windows = []  # 储存window
         self.alert = None
-        self.listener = Listener(0)
+        self.listener = Listener(mode=0)
         self.nowWindow = None
-        self.showFPS = showFPS
-        self.noClean = noClean
+        self.show_fps = show_fps
+        self.no_clean = no_clean
         # clear
         clear()
 
@@ -51,17 +51,17 @@ class Frame:
         调用窗口的显示方法来切换窗口
     '''
     def showWindow(self, index):
-        if self.showFPS:
+        if self.show_fps:
             time_start = time.time()  # 开始计时
 
         win = self.windows[index]
-        win.showWindow(noClean=self.noClean)
+        win.showWindow(noClean=self.no_clean)
         self.nowWindow = index
         pointButton = win.getPointButton()
-        if pointButton != None:
+        if pointButton is not None:
             self.listener.setPointButton(pointButton)
 
-        if self.showFPS:
+        if self.show_fps:
             time_use = time.time() - time_start  # 计时
             if time_use == 0:
                 FPS = "   +∞"

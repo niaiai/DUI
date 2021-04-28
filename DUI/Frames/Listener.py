@@ -5,11 +5,12 @@
 # fileName: Listener.py
 
 from DUI.Widgets import Widget
+from DUI.enums import WidgetEnum
 
 
 class Listener(Widget):
     def __init__(self, keys=None, mode=0):
-        super().__init__("Listener")  # 参数: 标明自身类型
+        super().__init__(WidgetEnum.LISTENER)  # 参数: 标明自身类型
         self.mode = mode  # 0 为原生input监听   1 为C扩展监听
 
         if keys is None:
@@ -23,8 +24,6 @@ class Listener(Widget):
         self.dict = keys
         self.pointButton = None
 
-    def setDict(self, dict):
-        self.dict = dict
 
     def setPointButton(self, button):
         self.pointButton = button[1]

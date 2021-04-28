@@ -4,30 +4,30 @@
 # QQ: 1071445082
 # fileName: Button.py
 
+from DUI.enums import WidgetEnum, TextAlignEnum
 from DUI.Widgets import Text
 
 
 class Button(Text):
-    def __init__(self, text="", checked_prefix_text=">|", mode=False, id=None, onClick=None):
-        super().__init__(text, checked_prefix_text, id=id)
-        super().setType("Button")
-        self.isPointed = mode  # 指针是否指向当前Button bools
-        self.onClick = onClick  # 点击事件
+    def __init__(self, text="",
+                 pointed_text=">|",
+                 text_align: TextAlignEnum = TextAlignEnum.LEFT,
+                 is_pointed=False,
+                 widget_id=None,
+                 on_click=None):
+        super().__init__(text, pointed_text, text_align=text_align, widget_id=widget_id)
+        self.widget_type = WidgetEnum.BUTTON
+        self.is_pointed = is_pointed  # 指针是否指向当前Button bool (False 未选中 True 选中)
+        self.on_click = on_click  # 点击事件
 
     def pointed(self):
-        self.isPointed = True
+        self.is_pointed = True
 
     def leave(self):
-        self.isPointed = False
-
-    def setOnClick(self, func):
-        self.onClick = func
+        self.is_pointed = False
 
     def press(self):
-        self.onClick()
+        self.on_click()
 
-    '''
-        绘制按钮  mode: 0 未选中 1 选中
-    '''
-    def print(self, width, system, mode=0):
-        return super().print(width, system, self.isPointed)
+    def render(self, width, system):
+        return super().render(width, system, self.is_pointed)

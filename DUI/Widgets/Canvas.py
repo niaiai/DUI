@@ -9,7 +9,7 @@ from DUI.Widgets.Text import *
 
 class Canvas(Widget):
     def __init__(self, content=None, height=0, line=1):
-        super().__init__("Canvas")
+        super().__init__(WidgetEnum.CANVAS)
         if content is None:
             content = []
         self.height = height
